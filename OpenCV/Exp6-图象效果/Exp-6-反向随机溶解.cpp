@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<opencv2/highgui.hpp>
 #include<opencv2/core.hpp>
 #include<opencv2/imgproc.hpp>
@@ -25,7 +25,7 @@ void main()
 		Roi = img2(Rect(ccol, crow, 100, 100));
 		Boi = img1(Rect(ccol, crow, 100, 100));
 		Roi.copyTo(Boi);
-		imshow("·´ÏòËæ»úÈÜ½â", img1);
+		imshow("åå‘éšæœºæº¶è§£", img1);
 		waitKey(2);
 	}
 }

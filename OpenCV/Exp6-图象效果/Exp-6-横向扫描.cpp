@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<opencv2/highgui.hpp>
 #include<opencv2/core.hpp>
 #include<opencv2/imgproc.hpp>
@@ -30,7 +30,7 @@ void main()
 		white.cols--;
 
 		Boi.copyTo(buffer);
-		imshow("ºáÏòÉ¨Ãè", img1);
+		imshow("æ¨ªå‘æ‰«æ", img1);
 		waitKey(2);
 	}
 
