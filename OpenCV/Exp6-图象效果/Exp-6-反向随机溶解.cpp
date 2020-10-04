@@ -17,18 +17,15 @@ void main()
 	int ccol, crow;
 	int count=1000;
 	white.copyTo(img1, mask);
-	//imshow("test", img1);
 	while (count >0)
 	{
 		count--;
-		ccol = rng.uniform(0, img1.cols - 100);//左上角x随机坐标
-		crow = rng.uniform(0, img1.rows - 100);//左上角y随机坐标
-		Roi = img2(Rect(ccol, crow, 100, 100));//选择原图的(x,y)位置
-		Boi = img1(Rect(ccol, crow, 100, 100));//选择白板的(x,y)位置
-		Roi.copyTo(Boi);//原图 拷贝至 白板 所设定的区域
-		//imshow("test 1", img2);
-		imshow("test 3", img1);
-		waitKey(1);
+		ccol = rng.uniform(0, img1.cols - 100);
+		crow = rng.uniform(0, img1.rows - 100);
+		Roi = img2(Rect(ccol, crow, 100, 100));
+		Boi = img1(Rect(ccol, crow, 100, 100));
+		Roi.copyTo(Boi);
+		imshow("反向随机溶解", img1);
+		waitKey(2);
 	}
-	waitKey();
 }

@@ -14,13 +14,13 @@ int main()
 	while (count>0)
 	{
 		count--;
-		row=rng.uniform(0,img.rows-50);
-		col = rng.uniform(0, img.cols-50);
-		Roi = img(Rect(col,row, 50, 50));
+		row=rng.uniform(0,img.rows-100);
+		col = rng.uniform(0, img.cols-100);
+		Roi = img(Rect(col,row, 100, 100));
 		Roi = Scalar(255, 255, 255);
 		img.copyTo(blank);
 		imshow("a", img);
-		waitKey(5);
+		waitKey(1);
 	}
 
 	return 0;
