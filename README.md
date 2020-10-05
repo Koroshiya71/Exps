@@ -3,8 +3,6 @@
 
 OpenCV：主要存放计算机视觉课程相关项目和代码
 
-Unity:主要存放Unity相关Assets
-
-3Dmax：主要存放各种3dmax工程文件与渲染成品
+C# Study：主要存放自学C#过程中的部分练习题和练习项目
 
 贡献鸣谢：hjx大佬、cf大佬
