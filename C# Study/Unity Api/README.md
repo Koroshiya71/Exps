@@ -1,0 +1,5 @@
+主要存放一些学习UnityApi中创建的脚本
+
+包括MonoBehaviour、Time、Mathf等类的使用
+
+以及部分组件比如Rigidbody的使用等
