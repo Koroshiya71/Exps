@@ -7,25 +7,25 @@ using namespace cv;
 class ColorDetector
 {
 private:
-	int maxDist; // ÔÊĞíµÄ×î´óÑÕÉ«²î¾à
-	Vec3b target; // Ä¿±êÑÕÉ«
+	int maxDist; // å…è®¸çš„æœ€å¤§é¢œè‰²å·®è·
+	Vec3b target; // ç›®æ ‡é¢œè‰²
 public:
 	ColorDetector() : maxDist(100), target(0, 0, 0)
 	{
 	}
 
-	// ¼ÆËãÁ½¸öÑÕÉ«Ö®¼äµÄ¾àÀë
+	// è®¡ç®—ä¸¤ä¸ªé¢œè‰²ä¹‹é—´çš„è·ç¦»
 	int getColorDistance(const Vec3b& color1,
 	                     const Vec3b& color2) const
 	{
-		// ¼ÆËãÅ·Ê½¾àÀë
+		// è®¡ç®—æ¬§å¼è·ç¦»
 		return static_cast<int>(
 			norm<int, 3>(Vec3i(color1[0] - color2[0],
 			                   color1[1] - color2[1], color1[2] - color2[2]))
 		);
 	}
 
-	// ¼ÆËãÓëÄ¿±êÑÕÉ«µÄ²î¾à
+	// è®¡ç®—ä¸ç›®æ ‡é¢œè‰²çš„å·®è·
 	int getDistanceToTargetColor(const Vec3b& color) const
 	{
 		return getColorDistance(color, target);
@@ -34,19 +34,19 @@ public:
 	Mat process(const Mat& image)
 	{
 		Mat result;
-		// ÖØĞÂ·ÖÅä¶şÖµ½á¹ûÍ¼Ïñ
-		// ÓëÊäÈëÍ¼ÏñµÄ³ß´çÏàÍ¬£¬²»¹ıÊÇµ¥Í¨µÀ
+		// é‡æ–°åˆ†é…äºŒå€¼ç»“æœå›¾åƒ
+		// ä¸è¾“å…¥å›¾åƒçš„å°ºå¯¸ç›¸åŒï¼Œä¸è¿‡æ˜¯å•é€šé“
 		result.create(image.size(), CV_8U);
-		// ±éÀúÍ¼Ïñ£¬´¦ÀíÃ¿¸öÏñËØ
+		// éå†å›¾åƒï¼Œå¤„ç†æ¯ä¸ªåƒç´ 
 		for (int j = 0; j < image.rows; j++)
 		{
-			// È¡µÃĞĞjµÄÊ×µØÖ·
+			// å–å¾—è¡Œjçš„é¦–åœ°å€
 			const Vec3b* input = image.ptr<Vec3b>(j);
 			uchar* output = result.ptr<uchar>(j);
-			// ±éÀú¸ÃĞĞµÄÃ¿Ò»¸öÏñËØ
+			// éå†è¯¥è¡Œçš„æ¯ä¸€ä¸ªåƒç´ 
 			for (int i = 0; i < image.cols; i++)
 			{
-				// ±È½ÏÓëÄ¿±êÑÕÉ«µÄ²î¾à
+				// æ¯”è¾ƒä¸ç›®æ ‡é¢œè‰²çš„å·®è·
 				if (getDistanceToTargetColor(input[i]) <= maxDist)
 					output[i] = 255;
 				else
@@ -56,8 +56,8 @@ public:
 		return result;
 	}
 
-	// ÉèÖÃÑÕÉ«²î¾àµÄãĞÖµ
-	// ãĞÖµ±ØĞëÊÇÕıÊı£¬·ñÔò¾ÍÖÃÎª0
+	// è®¾ç½®é¢œè‰²å·®è·çš„é˜ˆå€¼
+	// é˜ˆå€¼å¿…é¡»æ˜¯æ­£æ•°ï¼Œå¦åˆ™å°±ç½®ä¸º0
 	void setColorDistanceThreshold(int distance)
 	{
 		if (distance < 0)
@@ -65,26 +65,26 @@ public:
 		maxDist = distance;
 	}
 
-	// È¡µÃÑÕÉ«²î¾àµÄãĞÖµ
+	// å–å¾—é¢œè‰²å·®è·çš„é˜ˆå€¼
 	int getColorDistanceThreshold() const
 	{
 		return maxDist;
 	}
 
-	// ÉèÖÃĞèÒª¼ì²âµÄÑÕÉ«
+	// è®¾ç½®éœ€è¦æ£€æµ‹çš„é¢œè‰²
 	void setTargetColor(uchar blue, uchar green, uchar red)
 	{
-		// ´ÎĞòÎªBGR
+		// æ¬¡åºä¸ºBGR
 		target = Vec3b(blue, green, red);
 	}
 
-	// ÉèÖÃĞèÒª¼ì²âµÄÑÕÉ«
+	// è®¾ç½®éœ€è¦æ£€æµ‹çš„é¢œè‰²
 	void setTargetColor(Vec3b color)
 	{
 		target = color;
 	}
 
-	// »ñÈ¡ĞèÒª¼ì²âµÄÑÕÉ«
+	// è·å–éœ€è¦æ£€æµ‹çš„é¢œè‰²
 	Vec3b getTargetColor() const
 	{
 		return target;

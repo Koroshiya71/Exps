@@ -1,81 +1,81 @@
-#include <opencv2\highgui\highgui.hpp>
+ï»¿#include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
 using namespace cv;
-void detectHScolor(const cv::Mat &image,	// ÊäÈëÍ¼Ïñ
-	double minHue, double maxHue,			// É«µ÷Çø¼ä
-	double minSat, double maxSat,			// ±¥ºÍ¶ÈÇø¼ä
-	cv::Mat &mask) {						// Êä³öÑÚÂë
-	// ×ª»»µ½HSV¿Õ¼ä
+void detectHScolor(const cv::Mat &image,	// è¾“å…¥å›¾åƒ
+	double minHue, double maxHue,			// è‰²è°ƒåŒºé—´
+	double minSat, double maxSat,			// é¥±å’Œåº¦åŒºé—´
+	cv::Mat &mask) {						// è¾“å‡ºæ©ç 
+	// è½¬æ¢åˆ°HSVç©ºé—´
 	cv::Mat hsv;
 	cv::cvtColor(image, hsv, CV_BGR2HSV);
 
-	// ·Ö¸î3¸öÍ¨µÀ£¬²¢´æ½ø3·ùÍ¼Ïñ
+	// åˆ†å‰²3ä¸ªé€šé“ï¼Œå¹¶å­˜è¿›3å¹…å›¾åƒ
 	std::vector<cv::Mat> channels;
 	cv::split(hsv, channels);
 
-	// É«µ÷ÑÚÂë
-	cv::Mat mask1;	// Ğ¡ÓÚmaxHue
-	// channels[0]ÖĞÏñËØÖµĞ¡ÓÚmaxHueÔò½«mask1ÖĞ¶ÔÓ¦ÏñËØÖµÖÃ255
+	// è‰²è°ƒæ©ç 
+	cv::Mat mask1;	// å°äºmaxHue
+	// channels[0]ä¸­åƒç´ å€¼å°äºmaxHueåˆ™å°†mask1ä¸­å¯¹åº”åƒç´ å€¼ç½®255
 	cv::threshold(channels[0], mask1, maxHue, 255, 
 		cv::THRESH_BINARY_INV);
-	cv::Mat mask2;	// ´óÓÚminHue
-	// channels[0]ÖĞÏñËØÖµĞ¡ÓÚminHueÔò½«mask2ÖĞ¶ÔÓ¦ÏñËØÖµÖÃ255
+	cv::Mat mask2;	// å¤§äºminHue
+	// channels[0]ä¸­åƒç´ å€¼å°äºminHueåˆ™å°†mask2ä¸­å¯¹åº”åƒç´ å€¼ç½®255
 	cv::threshold(channels[0], mask2, minHue, 255,
 		cv::THRESH_BINARY);
 
-	cv::Mat hueMask;	// É«µ÷ÑÚÂë
+	cv::Mat hueMask;	// è‰²è°ƒæ©ç 
 	if (minHue < maxHue)
-		hueMask = mask1 & mask2; // °´Î»Óë
-	else // Èç¹ûÇø¼ä´©Ô½0¶ÈÖĞÖáÏß
-		hueMask = mask1 | mask2; // °´Î»»ò
+		hueMask = mask1 & mask2; // æŒ‰ä½ä¸
+	else // å¦‚æœåŒºé—´ç©¿è¶Š0åº¦ä¸­è½´çº¿
+		hueMask = mask1 | mask2; // æŒ‰ä½æˆ–
 
-	// ±¥ºÍ¶ÈÑÚÂë
-	// channels[1]ÖĞÏñËØÖµĞ¡ÓÚmaxSatÔò½«mask1ÖĞ¶ÔÓ¦ÏñËØÖµÖÃ255
+	// é¥±å’Œåº¦æ©ç 
+	// channels[1]ä¸­åƒç´ å€¼å°äºmaxSatåˆ™å°†mask1ä¸­å¯¹åº”åƒç´ å€¼ç½®255
 	cv::threshold(channels[1], mask1, maxSat, 255,
 		cv::THRESH_BINARY_INV);
-	// channels[1]ÖĞÏñËØÖµ´óÓÚminSatÔò½«mask2ÖĞ¶ÔÓ¦ÏñËØÖµÖÃ255
+	// channels[1]ä¸­åƒç´ å€¼å¤§äºminSatåˆ™å°†mask2ä¸­å¯¹åº”åƒç´ å€¼ç½®255
 	cv::threshold(channels[1], mask2, minSat, 255,
 		cv::THRESH_BINARY);
 
-	cv::Mat satMask;	// ±¥ºÍ¶ÈÑÚÂë
+	cv::Mat satMask;	// é¥±å’Œåº¦æ©ç 
 	satMask = mask1 & mask2;
 
-	// ×éºÏÑÚÂë
+	// ç»„åˆæ©ç 
 	mask = hueMask & satMask;
 }
 
 
-// ÔÚYCrCb¿Õ¼äÓÃÍÖÔ²Æ¤·ôÄ£ĞÍ½øĞĞ·ôÉ«¼ì²â
-void detectSkinColor(const cv::Mat &image,	// ÊäÈëÍ¼Ïñ
-	cv::Mat &mask) {						// Êä³öÑÚÂë
+// åœ¨YCrCbç©ºé—´ç”¨æ¤­åœ†çš®è‚¤æ¨¡å‹è¿›è¡Œè‚¤è‰²æ£€æµ‹
+void detectSkinColor(const cv::Mat &image,	// è¾“å…¥å›¾åƒ
+	cv::Mat &mask) {						// è¾“å‡ºæ©ç 
 	
-	/*³õÊ¼»¯ÍÖÔ²Æ¤·ôÄ£ĞÍ*/
-	// ÓÃÓÚ·ôÉ«¼ì²âµÄÑÚÂëÍ¼Ïñ£¬256¡Á256´óĞ¡£¬³õÊ¼ÎªÈ«0
+	/*åˆå§‹åŒ–æ¤­åœ†çš®è‚¤æ¨¡å‹*/
+	// ç”¨äºè‚¤è‰²æ£€æµ‹çš„æ©ç å›¾åƒï¼Œ256Ã—256å¤§å°ï¼Œåˆå§‹ä¸ºå…¨0
 	cv::Mat skinCrCb(cv::Size(256, 256), CV_8UC1, cv::Scalar(0));
-	// ÔÚÑÚÂëÍ¼ÏñÖĞ»æÖÆÒ»°×É«ÍÖÔ²
-	cv::ellipse(skinCrCb, // Ä¿±êÍ¼Ïñ
-		cv::Point(113, 155.6), // ÍÖÔ²ÖĞĞÄ×ø±ê
-		cv::Size(23.4, 15.2),  // ÍÖÔ²³¤¶ÌÖáµÄ³¤¶È
-		43.0,				   // ÍÖÔ²³¤ÖáÓëË®Æ½·½Ïò¼Ğ½Ç
-		0.0,				   // ÆğÊ¼½Ç¶È
-		360.0,                 // ÖÕÖ¹½Ç¶È
-		cv::Scalar(255),	   // ÍÖÔ²Îª°×É«
-		-1					   // Ïß¿ò¿í¶È£¬Îª¸ºÊı±íÊ¾»æÖÆÌî³äÍÖÔ²
+	// åœ¨æ©ç å›¾åƒä¸­ç»˜åˆ¶ä¸€ç™½è‰²æ¤­åœ†
+	cv::ellipse(skinCrCb, // ç›®æ ‡å›¾åƒ
+		cv::Point(113, 155.6), // æ¤­åœ†ä¸­å¿ƒåæ ‡
+		cv::Size(23.4, 15.2),  // æ¤­åœ†é•¿çŸ­è½´çš„é•¿åº¦
+		43.0,				   // æ¤­åœ†é•¿è½´ä¸æ°´å¹³æ–¹å‘å¤¹è§’
+		0.0,				   // èµ·å§‹è§’åº¦
+		360.0,                 // ç»ˆæ­¢è§’åº¦
+		cv::Scalar(255),	   // æ¤­åœ†ä¸ºç™½è‰²
+		-1					   // çº¿æ¡†å®½åº¦ï¼Œä¸ºè´Ÿæ•°è¡¨ç¤ºç»˜åˆ¶å¡«å……æ¤­åœ†
 	);
 	
-	// ×ª»»µ½YCrCb¿Õ¼ä
+	// è½¬æ¢åˆ°YCrCbç©ºé—´
 	cv::Mat matYCrCb;
 	cv::cvtColor(image, matYCrCb, CV_BGR2YCrCb);
 
-	// ÓĞ±ØÒªµÄ»°ÖØĞÂ·ÖÅämaskµÄÊı¾İ¿Õ¼ä
+	// æœ‰å¿…è¦çš„è¯é‡æ–°åˆ†é…maskçš„æ•°æ®ç©ºé—´
 	mask.create(image.size(), CV_8UC1);
 
-	// ±éÀúÍ¼Ïñ£¬¼ì²âÃ¿¸öÏñËØÑÕÉ«ÊÇ·ñÎ»ÓÚÍÖÔ²ÄÚ²¿
+	// éå†å›¾åƒï¼Œæ£€æµ‹æ¯ä¸ªåƒç´ é¢œè‰²æ˜¯å¦ä½äºæ¤­åœ†å†…éƒ¨
 	for (int j = 0; j < matYCrCb.rows; j++) {
 		cv::Vec3b *input = matYCrCb.ptr<cv::Vec3b>(j);
 		uchar *output = mask.ptr<uchar>(j);
 		for (int i = 0; i < matYCrCb.cols; i++) {
-			// ½«ÏñËØµÄCrCbÖµ×÷Îª×ø±ê·ÃÎÊskinCrCbÍ¼Ïñ£¬ÔÚÍÖÔ²ÄÚ²¿Ôò±íÃæÊÇ·ôÉ«
+			// å°†åƒç´ çš„CrCbå€¼ä½œä¸ºåæ ‡è®¿é—®skinCrCbå›¾åƒï¼Œåœ¨æ¤­åœ†å†…éƒ¨åˆ™è¡¨é¢æ˜¯è‚¤è‰²
 			if (skinCrCb.at<uchar>(input[i][1], input[i][2]) > 0)
 				output[i] = 255;
 			else
@@ -91,12 +91,12 @@ void main()
 	detectHScolor(img,160,10,25,166,mask);
 	Mat detected(img.size(), CV_8UC3,Scalar(0,0,0)) ;
 	img.copyTo(detected,mask);
-	imshow("Ô­Í¼",img);
-	imshow("HSV¿Õ¼ä·ôÉ«¼ì²â",detected);
+	imshow("åŸå›¾",img);
+	imshow("HSVç©ºé—´è‚¤è‰²æ£€æµ‹",detected);
 
 	detected=Scalar(0,0,0);
 	detectSkinColor(img,mask);
 	img.copyTo(detected,mask);
-	imshow("ÍÖÔ²Æ¤·ôÄ£ĞÍ·ôÉ«¼ì²â",detected);
+	imshow("æ¤­åœ†çš®è‚¤æ¨¡å‹è‚¤è‰²æ£€æµ‹",detected);
 	waitKey(); 
 }
