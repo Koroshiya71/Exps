@@ -1,24 +1,24 @@
-#include<opencv2\highgui.hpp>
+ï»¿#include<opencv2\highgui.hpp>
 #include<opencv2/imgproc.hpp>
 #include<iostream>
 using namespace std;
 using namespace cv;
 void sharpen(const cv::Mat &image, cv::Mat &result) {
-	// ÅĞ¶ÏÊÇ·ñÒªÖØĞÂ·ÖÅäÍ¼ÏñÊı¾İ¡£Èç¹ûĞèÒª£¬¾Í·ÖÅä
+	// åˆ¤æ–­æ˜¯å¦è¦é‡æ–°åˆ†é…å›¾åƒæ•°æ®ã€‚å¦‚æœéœ€è¦ï¼Œå°±åˆ†é…
 	result.create(image.size(), image.type());
-	int nchannels = image.channels();	// »ñµÃÍ¨µÀÊı
-	// ´¦ÀíËùÓĞĞĞ(³ıÁËµÚÒ»ĞĞºÍ×îºóÒ»ĞĞ)
+	int nchannels = image.channels();	// è·å¾—é€šé“æ•°
+	// å¤„ç†æ‰€æœ‰è¡Œ(é™¤äº†ç¬¬ä¸€è¡Œå’Œæœ€åä¸€è¡Œ)
 	for (int j = 1; j < image.rows - 1; j++) {
 		const uchar* previous = 
-			image.ptr<const uchar>(j - 1);// ÉÏÒ»ĞĞ
+			image.ptr<const uchar>(j - 1);// ä¸Šä¸€è¡Œ
 		const uchar* current =
-			image.ptr<const uchar>(j);	  // µ±Ç°ĞĞ
+			image.ptr<const uchar>(j);	  // å½“å‰è¡Œ
 		const uchar* next =
-			image.ptr<const uchar>(j + 1);// ÏÂÒ»ĞĞ
-		uchar* output = result.ptr<uchar>(j);  // Êä³öĞĞ
-			// ±éÀúµ±Ç°ĞĞµÄÃ¿¸öÔªËØ(³ıÈ¥µÚÒ»ÁĞºÍ×îºóÒ»ÁĞÏñËØ¶ÔÓ¦µÄÔªËØ)
+			image.ptr<const uchar>(j + 1);// ä¸‹ä¸€è¡Œ
+		uchar* output = result.ptr<uchar>(j);  // è¾“å‡ºè¡Œ
+			// éå†å½“å‰è¡Œçš„æ¯ä¸ªå…ƒç´ (é™¤å»ç¬¬ä¸€åˆ—å’Œæœ€åä¸€åˆ—åƒç´ å¯¹åº”çš„å…ƒç´ )
 	for (int i = nchannels; i < (image.cols - 1) * nchannels; i++){
-		// Èñ»¯´¦Àí£¬satureate_castÊ¹µÃµ½µÄ½á¹ûÒ»¶¨ÔÚuchar		// ·¶Î§ÄÚ
+		// é”åŒ–å¤„ç†ï¼Œsatureate_castä½¿å¾—åˆ°çš„ç»“æœä¸€å®šåœ¨uchar		// èŒƒå›´å†…
 		*output++ = cv::saturate_cast<uchar>(
 			5 * current[i] - current[i - nchannels] -
 			current[i + nchannels] - previous[i] - next[i]
@@ -26,7 +26,7 @@ void sharpen(const cv::Mat &image, cv::Mat &result) {
 		}
 	}
 
-	// °ÑÎ´´¦ÀíµÄÏñËØÉèÎª0
+	// æŠŠæœªå¤„ç†çš„åƒç´ è®¾ä¸º0
 	result.row(0).setTo(cv::Scalar(0));
 	result.row(result.rows - 1).setTo(cv::Scalar(0));
 	result.col(0).setTo(cv::Scalar(0));
@@ -42,7 +42,7 @@ void main()
 	imshow("sharpen",image);
 	cout<<"sharpen:"<<deltaTime<<"s"<<endl;
 	Mat kernel(3, 3, CV_32F, cv::Scalar(0));
-	// ¶ÔÄÚºË¸³Öµ
+	// å¯¹å†…æ ¸èµ‹å€¼
 	kernel.at<float>(1, 1) = 5.0;
 	kernel.at<float>(0, 1) = -1.0;
 	kernel.at<float>(2, 1) = -1.0;
